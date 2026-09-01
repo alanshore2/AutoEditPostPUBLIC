@@ -1,0 +1,30 @@
+node_modules/
+dist/
+.env
+
+# Media — keep the repo light. Track broll/index.json but not the actual clips.
+*.mp4
+*.mov
+*.m4v
+*.webm
+*.mkv
+*.wav
+*.mp3
+*.m4a
+!broll/.gitkeep
+
+# Generated plans / outputs
+broll-plan.json
+broll-plan-*.json
+out/
+takes/
+Raw/
+Done/
+
+# Logs / OS junk
+*.log
+.DS_Store
+
+# python bytecode
+__pycache__/
+*.pyc

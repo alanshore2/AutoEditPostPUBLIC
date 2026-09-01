@@ -1,0 +1,27 @@
+{
+  "name": "autoeditpost",
+  "version": "0.2.0",
+  "description": "AutoEditPost: raw talking-head clips -> dynamic captions, b-roll cutaways, reframing, and audio cleanup, ready to post. FFmpeg + Whisper + LLM.",
+  "type": "module",
+  "bin": {
+    "autoeditpost": "./dist/cli.js",
+    "aep": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
