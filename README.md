@@ -151,6 +151,34 @@ AutoEditPost/
     index.json        # your b-roll library manifest (clips are gitignored)
 ```
 
+## LocalCut — desktop studio, MCP server, and web gateway
+
+`localcut/` is a companion app: a local-first talking-head editor with a
+Windows Electron UI, a stdio MCP server (so an AI client can drive the
+editor), an authenticated upload server, a browser gateway, and Postiz
+scheduling/repair tooling.
+
+```bash
+cd localcut
+npm install
+npm test           # 32 self-contained tests, no keys needed
+npm run mcp        # stdio MCP server
+npm start          # Electron desktop app
+npm run dist:win   # Windows installer
+```
+
+Postiz publishing needs your own credentials: `POSTIZ_KEY`, plus the
+integration id of each channel (`POSTIZ_IG`, `POSTIZ_FACEBOOK`,
+`POSTIZ_LINKEDIN`, `POSTIZ_TIKTOK`, `POSTIZ_YOUTUBE`). Optional
+`LOCALCUT_YOUTUBE_SITE` appends "Work with me: <site>" to YouTube captions.
+See `localcut/README.md` for the editor, upload server, and deploy units.
+
+Note: LocalCut's seven-stage batch-automation drawer drives stage scripts
+from a full AutoEditPost production checkout (`AUTOEDITPOST_ROOT`); those
+stage scripts are not part of this repo, so the automation drawer is not
+runnable from this repo alone. Editing, MCP control, export, review, and
+Postiz publishing all work standalone.
+
 ## Roadmap
 
 - Auto-tag b-roll with a vision model (skip manual descriptions)

@@ -1,0 +1,111 @@
+.schedule-confirm-backdrop {
+  position: fixed;
+  z-index: 360;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: rgba(2, 5, 8, .88);
+  backdrop-filter: blur(10px);
+}
+.schedule-confirm-backdrop[hidden] { display: none; }
+.schedule-confirm-card {
+  width: min(820px, 94vw);
+  max-height: calc(100vh - 56px);
+  overflow: auto;
+  border: 1px solid #46566a;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #151d27, #0c1118);
+  box-shadow: 0 35px 120px rgba(0, 0, 0, .72);
+}
+.schedule-confirm-card > header {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 24px;
+  border-bottom: 1px solid #2c3744;
+  background: linear-gradient(100deg, #172330, #111820);
+}
+.schedule-confirm-card h2 { margin: 5px 0 0; font-size: 24px; line-height: 1.2; }
+.schedule-confirm-card > header > button {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border: 1px solid #3b4858;
+  border-radius: 8px;
+  background: #1b2530;
+  color: #b6c2d0;
+  font-size: 24px;
+  cursor: pointer;
+}
+.schedule-confirm-body { display: grid; gap: 15px; padding: 22px 24px; }
+.schedule-confirm-intro { margin: 0; color: #a9b7c6; font-size: 14px; line-height: 1.55; }
+.schedule-confirm-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid #314050;
+  border-radius: 10px;
+  background: #0c131a;
+}
+.schedule-confirm-summary > div { padding: 15px; border-right: 1px solid #293746; }
+.schedule-confirm-summary > div:last-child { border: 0; }
+.schedule-confirm-summary strong { display: block; color: #eef5fd; font-size: 23px; }
+.schedule-confirm-summary span { display: block; margin-top: 4px; color: #7d8c9d; font-size: 11px; }
+.schedule-confirm-window { display: grid; gap: 1px; overflow: hidden; border: 1px solid #2b3744; border-radius: 9px; }
+.schedule-confirm-window > div { display: grid; grid-template-columns: 135px minmax(0, 1fr); gap: 15px; padding: 11px 13px; background: #101820; }
+.schedule-confirm-window span { color: #758598; font-size: 12px; }
+.schedule-confirm-window strong { color: #d7e1ec; font-size: 12px; line-height: 1.4; }
+.schedule-confirm-warning,
+.schedule-confirm-rules { display: grid; gap: 5px; padding: 12px 14px; border: 1px solid #326951; border-radius: 9px; background: #10231c; }
+.schedule-confirm-warning strong,
+.schedule-confirm-rules strong { color: #8fe0bb; font-size: 13px; }
+.schedule-confirm-warning span,
+.schedule-confirm-rules span { color: #82a394; font-size: 12px; line-height: 1.45; }
+.schedule-confirm-warning.attention { border-color: #8a6538; background: #2a2013; }
+.schedule-confirm-warning.attention strong { color: #f0bf72; }
+.schedule-confirm-warning.attention span { color: #bda27c; }
+.schedule-confirm-rules { border-color: #34465c; background: #111b27; }
+.schedule-confirm-rules strong { color: #a8c4e7; }
+.schedule-confirm-rules span { color: #8195ad; }
+.schedule-confirm-field { display: grid; gap: 8px; color: #bec9d5; font-size: 13px; }
+.schedule-confirm-field b { color: #fff; letter-spacing: .08em; }
+.schedule-confirm-field input {
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #4b5c70;
+  border-radius: 9px;
+  outline: 0;
+  background: #080d12;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+.schedule-confirm-field input:focus { border-color: #777deb; box-shadow: 0 0 0 3px rgba(119, 125, 235, .16); }
+.schedule-confirm-card > footer { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px 20px; border-top: 1px solid #293441; }
+.schedule-confirm-card > footer button {
+  min-width: 130px;
+  height: 44px;
+  padding: 0 17px;
+  border: 1px solid #3c4959;
+  border-radius: 8px;
+  background: #19222c;
+  color: #b7c3d0;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.schedule-confirm-card > footer .schedule-confirm-start { min-width: 230px; border-color: #6a63ac; background: linear-gradient(135deg, #5551a5, #7378dd); color: #fff; }
+.schedule-confirm-card > footer button:disabled { opacity: .35; cursor: default; }
+@media (max-width: 760px) {
+  .schedule-confirm-summary { grid-template-columns: repeat(2, 1fr); }
+  .schedule-confirm-summary > div:nth-child(2) { border-right: 0; }
+  .schedule-confirm-summary > div:nth-child(-n+2) { border-bottom: 1px solid #293746; }
+  .schedule-confirm-window > div { grid-template-columns: 1fr; gap: 4px; }
+  .schedule-confirm-card > footer { flex-direction: column; }
+  .schedule-confirm-card > footer button,
+  .schedule-confirm-card > footer .schedule-confirm-start { width: 100%; }
+}

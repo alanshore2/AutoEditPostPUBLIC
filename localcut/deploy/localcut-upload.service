@@ -1,0 +1,22 @@
+[Unit]
+Description=LocalCut authenticated media ingest
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=localcut
+Group=localcut
+EnvironmentFile=/etc/localcut-upload.env
+ExecStart=/usr/bin/node /opt/localcut/upload-server.mjs
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/localcut/uploads
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

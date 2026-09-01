@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "localcut": {
+      "command": "node",
+      "args": [
+        "C:\\localcut\\src\\server.mjs"
+      ],
+      "env": {
+        "LOCALCUT_DATA_DIR": "C:\\Users\\you\\.localcut",
+        "AUTOEDITPOST_ROOT": "C:\\AutoEditPost"
+      }
+    }
+  }
+}

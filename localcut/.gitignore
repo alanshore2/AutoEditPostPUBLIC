@@ -1,0 +1,10 @@
+node_modules/
+release/
+build/dist/
+data/
+tmp/
+backups/
+mcp-session.jsonl
+*.log
+__pycache__/
+*.pyc

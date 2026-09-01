@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' file: data:; media-src 'self' file: blob:; connect-src 'self'; object-src 'none'; frame-src 'none'">
+  <title>LocalCut — AutoEditPost Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="schedule-confirm.css">
+  <link rel="stylesheet" href="podcast.css">
+</head>
+<body>
+  <div class="boot-screen" id="bootScreen">
+    <img src="../assets/localcut-mark.svg" alt="LocalCut">
+    <strong>Opening AutoEditPost Studio</strong>
+    <span>Loading local projects, media, and pipeline state…</span>
+    <i></i>
+    <a id="desktopInstallerLink" href="../../release/LocalCut-Setup-0.8.6-x64.exe" hidden>Install LocalCut for Windows</a>
+  </div>
+
+  <div class="windowbar">
+    <div class="window-brand"><img src="../assets/localcut-mark.svg" alt=""><b>LocalCut</b></div>
+    <span>AUTOEDITPOST STUDIO · LOCAL WORKSPACE</span>
+  </div>
+
+  <div class="studio-shell">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-button home-button" id="projectLibraryButton" title="Project library" aria-label="Project library">
+          <svg viewBox="0 0 24 24"><path d="M4 5.5 12 2l8 3.5V20h-6v-6h-4v6H4V5.5Zm2 1.3V18h2v-6h8v6h2V6.8l-6-2.6-6 2.6Z"/></svg>
+        </button>
+        <input class="project-name" id="projectName" value="AutoEditPost Studio" aria-label="Rename project">
+      </div>
+      <div class="topbar-center">
+        <button class="icon-button" id="undoButton" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+        <button class="icon-button" id="redoButton" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
+        <button class="top-button" id="versionsButton"><span>◷</span> Versions</button>
+        <button class="top-button" id="workspaceButton"><span>▥</span> Workspace</button>
+      </div>
+      <div class="topbar-right">
+        <button class="top-button podcast-button" id="podcastButton"><span>◉</span> Podcast</button>
+        <button class="top-button automation-button" id="automationButton"><i></i> Batches</button>
+        <button class="top-button export-button" id="exportButton">Export</button>
+        <div class="profile-mark">XZ</div>
+      </div>
+    </header>
+
+    <main class="editor-workspace" id="editorWorkspace">
+      <section class="assistant-panel panel-zone">
+        <div class="zone-title"><strong>AI</strong><span class="local-chip">LOCAL</span></div>
+        <div class="assistant-scroll" id="assistantScroll">
+          <div class="assistant-welcome" id="assistantWelcome">
+            <div class="assistant-orb"><img src="../assets/localcut-mark.svg" alt=""></div>
+            <h1>What do you want to create today?</h1>
+            <p>Choose a workflow or describe the edit. LocalCut will connect it to your AutoEditPost tools.</p>
+            <div class="workflow-list">
+              <button data-workflow="talking"><span class="workflow-art violet">TH</span><b>Build Talking Heads</b><small>Analyze Raw + edit every reel</small></button>
+              <button data-workflow="reels"><span class="workflow-art blue">12</span><b>Run Latest 12-Reel Batch</b><small>Tight hooks · safe-box captions · automatic QA</small></button>
+              <button data-workflow="captions"><span class="workflow-art amber">CC</span><b>Dynamic Captions</b><small>Burn active-word subtitles</small></button>
+              <button data-workflow="review"><span class="workflow-art green">QA</span><b>Review Finished Batch</b><small>Open every reel and deliverable</small></button>
+              <button data-workflow="podcast"><span class="workflow-art podcast-art">◉</span><b>Podcast Audio</b><small>Deep voice · cleanup · dead-space cuts</small></button>
+              <button data-workflow="motion"><span class="workflow-art pink">MG</span><b>Motion Graphics</b><small>Cards, callouts, B-roll</small></button>
+              <button data-workflow="publish"><span class="workflow-art cyan">↗</span><b>Publishing Package</b><small>Covers, copy, schedules</small></button>
+            </div>
+          </div>
+          <div class="chat-thread" id="chatThread"></div>
+        </div>
+        <div class="prompt-composer">
+          <textarea id="promptInput" rows="3" placeholder="Describe what you'd like to create…"></textarea>
+          <div class="composer-actions">
+            <div>
+              <button class="mini-tool" id="agentSettingsButton" title="Agent settings">✣</button>
+              <button class="mini-tool" id="attachButton" title="Import media">＋</button>
+              <button class="mini-tool labeled" id="styleButton">◉ <span>Style</span></button>
+              <button class="mini-tool labeled" id="skillsButton">◇ <span>Skills</span></button>
+              <button class="mini-tool" id="selectionContextButton" title="Selection context">⌖</button>
+            </div>
+            <button class="send-button" id="sendPromptButton" title="Run prompt">↑</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="media-panel panel-zone">
+        <nav class="media-tabs" aria-label="Media panels">
+          <button class="active" data-media-tab="assets">My Assets</button>
+          <button data-media-tab="library">Library</button>
+          <button data-media-tab="transcript">Transcript</button>
+        </nav>
+
+        <div class="media-view active" id="media-assets">
+          <div class="media-toolbar">
+            <label class="search-box"><span>⌕</span><input id="assetSearch" placeholder="Search media"></label>
+            <button id="uploadAssetButton" title="Upload or import media">⇧</button>
+            <button id="newBinButton" title="New bin">▣</button>
+            <button id="assetViewButton" title="Toggle view">☷</button>
+            <button id="assetSortButton" title="Sort">↕</button>
+          </div>
+          <div class="bin-strip"><span>AutoEditPost</span><small id="assetCount">0 assets</small></div>
+          <div class="asset-grid" id="assetGrid"></div>
+          <div class="drop-target" id="mediaDropTarget"><b>Drop media here</b><span>upload to the configured server</span></div>
+        </div>
+
+        <div class="media-view" id="media-library">
+          <div class="library-categories" id="libraryCategories">
+            <button class="active" data-category="motion">Motion Graphics</button><button data-category="sound">Sound Effects</button>
+            <button data-category="transition">Transitions</button><button data-category="fx">FX</button>
+            <button data-category="zoom">Zoom</button><button data-category="lut">LUTs</button><button data-category="audio">Audio</button>
+          </div>
+          <div class="library-filter"><button>☆ Favorites</button><button class="active">Popular</button></div>
+          <div class="template-grid" id="templateGrid"></div>
+        </div>
+
+        <div class="media-view" id="media-transcript">
+          <div class="transcript-header"><div><strong>Text-based editing</strong><span id="transcriptSource">Choose an asset with captions</span></div><button id="refreshTranscript">↻</button></div>
+          <div class="transcript-lines" id="transcriptLines"></div>
+        </div>
+      </section>
+
+      <section class="workbench panel-zone">
+        <div class="viewer-pane">
+          <div class="zone-title viewer-title"><strong>VIEWER</strong><span id="viewerAssetName">No media selected</span></div>
+          <div class="viewer-stage ratio-9-16" id="viewerStage">
+            <video id="viewerVideo" preload="metadata"></video>
+            <div class="viewer-empty" id="viewerEmpty"><span>⇧</span><b>Drop media here</b><small>Import an asset or open a finished reel</small></div>
+            <div class="safe-guides" id="safeGuides"></div>
+          </div>
+          <div class="viewer-controls">
+            <button id="playButton" title="Play / pause">▶</button>
+            <time id="viewerTime">00:00.00</time>
+            <div class="viewer-spacer"></div>
+            <button class="control-pill" id="aspectButton">9:16</button>
+            <button class="control-pill" id="captionsButton">CC <span>On</span></button>
+            <button id="captionStyleButton" title="Caption style">A</button>
+            <button id="fullscreenButton" title="Fullscreen">⛶</button>
+          </div>
+        </div>
+
+        <div class="timeline-pane" id="timelinePane">
+          <div class="timeline-heading">
+            <div class="timeline-label"><strong>TIMELINE</strong><span id="timelineDuration">00:00:00</span></div>
+            <div class="timeline-tools">
+              <button id="addTrackButton" title="Add track">＋</button>
+              <button class="active" data-edit-mode="select" title="Selection mode (V)">⌁</button>
+              <button data-edit-mode="trim" title="Trim mode (N)">⇥</button>
+              <button data-edit-mode="blade" title="Blade mode (B)">✂</button>
+              <button id="splitButton" title="Split selected clip">⌁|</button>
+              <button class="active" id="snapButton" title="Snapping">⌕</button>
+              <button id="recordButton" title="Record voiceover">●</button>
+              <button id="recordSettingsButton" title="Recording settings">⌄</button>
+            </div>
+            <div class="timeline-zoom"><button id="zoomOut">−</button><span id="zoomValue">70%</span><button id="zoomIn">＋</button><button id="fitTimeline">Fit</button></div>
+          </div>
+          <div class="timeline-body" id="timelineBody">
+            <div class="track-heads">
+              <div class="ruler-spacer"></div>
+              <div class="track-head"><b>V2</b><span>Motion</span><div>◉ ◌</div></div>
+              <div class="track-head active"><b>V1</b><span>Video 1</span><div>◉ ◌</div></div>
+              <div class="track-head"><b>A1</b><span>Audio 1</span><div>◉ ◌</div></div>
+            </div>
+            <div class="timeline-scroll" id="timelineScroll">
+              <div class="time-ruler" id="timeRuler"></div>
+              <div class="playhead" id="playhead"><i></i></div>
+              <div class="track-lane" data-track="V2"></div>
+              <div class="track-lane active" data-track="V1"></div>
+              <div class="track-lane" data-track="A1"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <section class="podcast-hub" id="podcastHub" hidden aria-label="Local podcast audio workspace">
+    <header class="podcast-header">
+      <button type="button" id="closePodcast">&larr; Back to editor</button>
+      <div><span class="eyebrow">LOCAL PODCAST STUDIO</span><h1>Make the voice deep, clean, and ready to publish</h1><p>Audio isolation, controlled low-end depth, long-pause removal, loudness mastering, and synchronized video—all on this computer.</p></div>
+      <div class="podcast-local-badge"><i></i><span>100% local processing</span></div>
+    </header>
+    <div class="podcast-body">
+      <aside class="podcast-setup">
+        <section class="podcast-card source-card">
+          <div class="podcast-card-heading"><div><span>STEP 1</span><strong>Choose the recording</strong></div><em>Audio or video</em></div>
+          <button type="button" class="podcast-drop" id="podcastDrop">
+            <b>＋</b><strong>Choose or drop a podcast file</strong><span>MP4, MOV, MKV, WebM, MP3, WAV, M4A, AAC, FLAC, or OGG</span>
+          </button>
+          <div class="podcast-source-details" id="podcastSourceDetails" hidden></div>
+          <button type="button" class="remove-podcast-source" id="removePodcastSource" hidden>Remove recording</button>
+        </section>
+        <section class="podcast-card controls-card">
+          <div class="podcast-card-heading"><div><span>STEP 2</span><strong>Set the correction</strong></div><em>Safe defaults loaded</em></div>
+          <label class="podcast-range"><div><strong>Voice depth</strong><span id="voiceDepthLabel">Deep and clear</span></div><input id="podcastVoiceDepth" type="range" min="0" max="100" step="1" value="70"><small>Builds chest and authority without fake pitch shifting.</small></label>
+          <label class="podcast-range"><div><strong>Voice clarity</strong><span id="clarityLabel">Crisp</span></div><input id="podcastClarity" type="range" min="0" max="100" step="1" value="78"><small>Removes muddiness and restores consonants and natural air.</small></label>
+          <label class="podcast-range"><div><strong>Room-noise cleanup</strong><span id="cleanupLabel">Strong</span></div><input id="podcastCleanup" type="range" min="0" max="100" step="1" value="75"><small>Separates speech from steady room tone, fan noise, and low rumble.</small></label>
+          <label class="podcast-video-toggle"><input id="podcastRemoveHum" type="checkbox" checked><span><strong>Remove Focusrite / electrical hum</strong><small>Precisely removes 60 Hz mains hum and its harmonics without thinning your voice.</small></span></label>
+          <label class="podcast-range"><div><strong>Major dead space</strong><span id="majorSilenceLabel">Longer than 1.6 sec</span></div><input id="podcastMajorSilence" type="range" min="1" max="5" step="0.1" value="1.6"><small>Short natural pauses remain untouched.</small></label>
+          <label class="podcast-range"><div><strong>Pause left after a cut</strong><span id="retainedPauseLabel">0.4 sec</span></div><input id="podcastRetainedPause" type="range" min="0.2" max="1.2" step="0.1" value="0.4"><small>Keeps speech from sounding rushed or robotic.</small></label>
+          <label class="podcast-video-toggle"><input id="podcastPreserveVideo" type="checkbox" checked><span><strong>Also create corrected video</strong><small>Video cuts stay synchronized with the mastered audio.</small></span></label>
+        </section>
+        <div class="podcast-run-actions"><button type="button" id="cancelPodcast" hidden>Stop processing</button><button type="button" class="podcast-process" id="processPodcast" disabled>Fix this podcast</button></div>
+      </aside>
+      <main class="podcast-review">
+        <section class="podcast-pipeline" id="podcastPipeline" aria-label="Podcast processing graph">
+          <div data-podcast-stage="inspect"><i></i><strong>Inspect</strong><span>Read tracks</span></div><b>&rarr;</b>
+          <div data-podcast-stage="analyze"><i></i><strong>Analyze</strong><span>Long pauses</span></div><b>&rarr;</b>
+          <div data-podcast-stage="isolate"><i></i><strong>Isolate</strong><span>Hum + noise</span></div><b>&rarr;</b>
+          <div data-podcast-stage="deepen"><i></i><strong>Deepen</strong><span>Natural weight</span></div><b>&rarr;</b>
+          <div data-podcast-stage="trim"><i></i><strong>Tighten</strong><span>Major gaps</span></div><b>&rarr;</b>
+          <div data-podcast-stage="loudness"><i></i><strong>Master</strong><span>-16 LUFS</span></div><b>&rarr;</b>
+          <div data-podcast-stage="verify"><i></i><strong>Verify</strong><span>Sync + files</span></div>
+        </section>
+        <section class="podcast-progress-card" id="podcastProgressCard">
+          <div><span id="podcastProgressStage">READY</span><strong id="podcastProgressMessage">Choose a recording to begin</strong><p id="podcastProgressDetail">The original file is never overwritten.</p></div>
+          <em id="podcastProgressPercent">0%</em><div class="podcast-progress-track"><i id="podcastProgressBar"></i></div>
+        </section>
+        <section class="podcast-players">
+          <article><header><div><span>ORIGINAL</span><strong>Before correction</strong></div><em id="podcastBeforeDuration">No source</em></header><div class="podcast-player-shell"><video id="podcastSourceVideo" controls playsinline hidden></video><audio id="podcastSourceAudio" controls hidden></audio><div class="podcast-player-empty" id="podcastSourceEmpty">Choose a recording to preview it here.</div></div></article>
+          <article class="podcast-after"><header><div><span>MASTERED</span><strong>Deep and clean</strong></div><em id="podcastAfterDuration">Waiting</em></header><div class="podcast-player-shell"><video id="podcastOutputVideo" controls playsinline hidden></video><audio id="podcastOutputAudio" controls hidden></audio><div class="podcast-player-empty" id="podcastOutputEmpty">The corrected result will appear here.</div></div></article>
+        </section>
+        <section class="podcast-result" id="podcastResult" hidden>
+          <header><div><span>VERIFIED OUTPUT</span><h2>Your podcast is ready</h2><p id="podcastResultSummary"></p></div><button type="button" id="openPodcastFolder">Open output folder</button></header>
+          <div class="podcast-result-stats" id="podcastResultStats"></div>
+          <div class="podcast-output-files" id="podcastOutputFiles"></div>
+        </section>
+        <section class="podcast-history"><header><div><span>RECENT LOCAL MASTERS</span><strong>Podcast history</strong></div><button type="button" id="refreshPodcastHistory">Refresh</button></header><div id="podcastHistoryList"><p>No processed podcasts yet.</p></div></section>
+      </main>
+    </div>
+  </section>
+
+  <div class="context-popover" id="contextPopover" hidden></div>
+
+  <div class="modal-backdrop" id="projectModal" hidden>
+    <section class="project-modal modal-card">
+      <header><div><span class="eyebrow">LOCAL PROJECTS</span><h2>Project library</h2></div><button data-close-modal="projectModal">×</button></header>
+      <div class="project-toolbar"><label><span>⌕</span><input id="projectSearch" placeholder="Search projects"></label><button id="projectGridMode">▦</button><button id="projectListMode">☷</button><button id="projectSort">↕</button></div>
+      <div class="project-grid" id="projectGrid"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="versionsModal" hidden>
+    <section class="small-modal modal-card">
+      <header><div><span class="eyebrow">CHECKPOINTS</span><h2>Project versions</h2></div><button data-close-modal="versionsModal">×</button></header>
+      <div class="save-version-row"><input id="versionName" placeholder="Version name"><button id="saveVersionButton">Save current</button></div>
+      <div class="versions-list" id="versionsList"></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="exportModal" hidden>
+    <section class="small-modal modal-card">
+      <header><div><span class="eyebrow">LOCAL RENDER</span><h2>Export timeline</h2></div><button data-close-modal="exportModal">×</button></header>
+      <div class="export-summary"><div><span>Format</span><strong>MP4 · H.264 / AAC</strong></div><div><span>Canvas</span><strong id="exportCanvas">1080 × 1920 · 30 fps</strong></div><div><span>Privacy</span><strong class="green">100% local</strong></div></div>
+      <button class="wide-primary" id="startExportButton">Choose destination and export</button>
+      <div class="export-progress" id="exportProgress" hidden><i></i><span>Rendering with local FFmpeg…</span></div>
+    </section>
+  </div>
+
+  <div class="drawer-backdrop" id="automationBackdrop" hidden></div>
+  <aside class="automation-drawer batch-workspace" id="automationDrawer" aria-label="Talking Heads batch workspace">
+    <header><div><span class="eyebrow">AUTOEDITPOST PRODUCTION</span><h2>Talking Heads batch workspace</h2><p>One source video, its instructions, every reel, and every deliverable.</p></div><button id="closeAutomation" aria-label="Close batch workspace">×</button></header>
+    <div class="batch-history" id="batchHistory" aria-label="Video batches"></div>
+    <div class="automation-status" id="automationStatus"></div>
+    <div class="batch-source-strip" id="batchSourceStrip"></div>
+    <div class="automation-actions"><button id="openBatchFolder">Open outputs</button><button id="copyBatchLink">Copy batch link</button><button class="publishing-button" id="openPublishing">Postiz schedule + carousels</button><button id="retryBatch" hidden>Retry failed</button><button id="cancelBatch" hidden>Stop batch</button><button id="regenerateAllCovers">Add lettering to all covers</button><button id="redoAllCaptions">Redo all captions face-safe</button><button id="rebuildBatch">Rebuild all reels</button><button class="primary" id="runDefaultBatch">Process + QA latest Raw batch</button></div>
+    <div class="automation-section graph-section" id="executionGraphSection"><div class="section-title"><div><strong>Execution graph</strong><span>Cut → Clean → Tighten → Speed → Captions → Render → QA</span></div><button type="button" class="graph-toggle" id="toggleExecutionGraph" aria-expanded="true" aria-controls="automationGraph">Hide graph</button></div><div id="automationGraph"></div></div>
+    <div class="automation-section reels-section"><div class="section-title"><strong>Reels and deliverables</strong><span id="qaSummary">Local technical QA</span></div><div class="batch-reel-list" id="qaGallery"></div></div>
+    <section class="publishing-hub" id="publishingHub" hidden aria-label="Postiz publishing and carousel workspace">
+      <header class="publishing-header"><button id="closePublishing">&#8592; Back to batch</button><div><span class="eyebrow">POSTIZ PUBLISHING HUB</span><h2>Schedule reels and carousels</h2><p>Review every file, platform, date, and time before anything leaves this computer.</p></div><div class="publishing-connection" id="publishingConnection"><i></i><span>Checking Postiz...</span></div></header>
+      <div class="publishing-body">
+        <aside class="publishing-settings">
+          <section class="publish-card connection-card">
+            <div class="publish-card-title"><div><span>Connection</span><strong>Postiz API</strong></div><button id="testPostiz">Test</button></div>
+            <label>API address<input id="postizApiUrl" value="https://api.postiz.com/public/v1"></label>
+            <label>API key<input id="postizApiKey" type="password" autocomplete="off" placeholder="Paste once; Windows stores it encrypted"></label>
+            <div class="connection-actions"><button id="savePostizConnection">Save encrypted connection</button><span id="postizConnectionNote">No key is exposed to the interface.</span></div>
+          </section>
+          <section class="publish-card schedule-card">
+            <div class="publish-card-title"><div><span>Schedule</span><strong>Eastern-time posting rhythm</strong></div><em>Preview first</em></div>
+            <p>Two reels daily at 9 AM and 6 PM. One carousel daily at 1 PM. TikTok leads every slot by one hour.</p>
+            <div class="schedule-fields"><label>Start date<input id="publishStartDate" type="date"></label><label>Reel times<input id="publishReelTimes" value="09:00, 18:00"></label><label>Carousel time<input id="publishCarouselTime" value="13:00"></label><label>Time zone<select id="publishTimeZone"><option value="America/New_York">America/New_York</option></select></label></div>
+            <div class="platform-choice" id="publishPlatforms"></div>
+          </section>
+          <section class="publish-card content-card reels-publish-card">
+            <div class="publish-card-title"><div><span>Video posts</span><strong id="publishReelCount">Talking-head reels</strong></div><button id="toggleAllPublishReels">Select all approved</button></div>
+            <div class="publish-asset-list" id="publishReelList"></div>
+          </section>
+          <section class="publish-card content-card carousel-publish-card">
+            <div class="publish-card-title"><div><span>Image posts</span><strong id="publishCarouselCount">Carousel library</strong></div><label class="reschedule-toggle"><input id="allowScheduledCarousels" type="checkbox"> Include previously scheduled</label></div>
+            <div class="carousel-library-summary" id="carouselLibrarySummary"></div>
+            <div class="publish-carousel-grid" id="publishCarouselList"></div>
+          </section>
+        </aside>
+        <main class="publishing-preview">
+          <section class="active-schedule" id="activePostizSchedule" aria-label="Live Postiz calendar">
+            <header><div><span>LIVE POSTIZ CALENDAR</span><h3>What is actually scheduled</h3><p id="activeScheduleNote">Pulling the active schedule from Postiz&hellip;</p></div><div class="active-schedule-actions"><label>Window<select id="activeScheduleRange"><option value="14">Next 14 days</option><option value="30" selected>Next 30 days</option><option value="60">Next 60 days</option><option value="90">Next 90 days</option></select></label><button id="refreshActiveSchedule">Refresh schedule</button></div></header>
+            <div class="active-schedule-summary" id="activeScheduleSummary"><div><strong>&mdash;</strong><span>Scheduled</span></div><div><strong>&mdash;</strong><span>Reels</span></div><div><strong>&mdash;</strong><span>Carousels</span></div><div><strong>&mdash;</strong><span>Unmatched</span></div></div>
+            <div class="active-schedule-filters" id="activeScheduleFilters"><button class="active" data-schedule-filter="all">Everything</button><button data-schedule-filter="reel">Reels</button><button data-schedule-filter="carousel">Carousels</button><button data-schedule-filter="other">Other / unmatched</button></div>
+            <div class="active-schedule-table-wrap"><table class="active-schedule-table"><thead><tr><th>When (Eastern)</th><th>Content</th><th>Type</th><th>Channel</th><th>State</th></tr></thead><tbody id="activeScheduleRows"><tr><td colspan="5" class="queue-empty">Connecting to Postiz&hellip;</td></tr></tbody></table></div>
+          </section>
+          <section class="publish-graph" aria-label="Publishing execution graph"><div><i class="ready"></i><strong>Package</strong><span>Files + copy</span></div><b>&#8594;</b><div><i></i><strong>Upload</strong><span>Postiz media</span></div><b>&#8594;</b><div><i></i><strong>Schedule</strong><span>Platform slots</span></div><b>&#8594;</b><div><i></i><strong>Verify</strong><span>Saved IDs</span></div></section>
+          <section class="queue-summary" id="publishQueueSummary"><div><span>LOCAL PREVIEW</span><h3>Build the exact queue</h3><p>Select reels, carousel decks, platforms, and a start date. The preview does not publish.</p></div><strong>0 posts</strong></section>
+          <div class="queue-actions"><button id="revealPostizPlan">Open saved plan</button><button class="primary" id="buildPostizPlan">Build schedule preview</button><button class="commit" id="commitPostizPlan" disabled>Upload + schedule in Postiz</button></div>
+          <div class="queue-table-wrap"><table class="queue-table"><thead><tr><th>Content</th><th>Package</th><th>Local slot</th><th>Platforms</th><th>Status</th></tr></thead><tbody id="publishQueueRows"><tr><td colspan="5" class="queue-empty">No plan built yet.</td></tr></tbody></table></div>
+          <div class="publishing-proof" id="publishingProof"><strong>Nothing has been sent.</strong><span>A saved JSON plan and duplicate-safe state file provide the audit trail.</span></div>
+        </main>
+      </div>
+    </section>
+    <section class="reel-reviewer" id="reelReviewer" hidden aria-label="Reel review workspace">
+      <header class="reviewer-header"><button id="closeReelReviewer">← All reels</button><div><span class="eyebrow">AUDITPOST REVIEW</span><h2 id="reviewerTitle">Reel review</h2><p id="reviewerMeta"></p></div><div class="reviewer-nav"><button id="previousReviewReel">Previous</button><label class="review-reel-slider"><span id="reviewReelSliderValue">Reel 1 of 1</span><input id="reviewReelSlider" type="range" min="1" max="1" step="1" value="1" list="reviewReelTicks" aria-label="Choose a reel from this batch"><datalist id="reviewReelTicks"></datalist></label><button id="nextReviewReel">Next</button></div></header>
+      <div class="reviewer-body">
+        <section class="review-player-panel">
+          <div class="review-video-frame" id="reviewVideoFrame"><video id="reviewVideo" controls playsinline preload="metadata"></video><div class="review-caption-guide" id="reviewCaptionGuide" hidden><span>CAPTION</span> <b>PREVIEW</b></div></div>
+          <div class="review-playback-note"><strong>Play, pause, and scrub the finished reel.</strong><span>Pause on any frame to turn it into the new cover photo.</span></div>
+          <div class="review-approval-bar" id="reviewApprovalBar"><div><span>POSTIZ APPROVAL</span><strong id="reviewApprovalState">Approval required</strong><p id="reviewApprovalDetail">Watch the reel, check the cover and captions, then approve this exact version.</p></div><button type="button" id="approveReviewReel">Approve reel for scheduling</button></div>
+        </section>
+        <aside class="review-feedback-panel">
+          <section class="feedback-card cover-feedback-card">
+            <div class="feedback-heading"><div><span>Cover photo</span><strong>Choose the expression and lettering</strong></div><span id="coverFeedbackState">Current cover</span></div>
+            <img id="reviewCover" alt="Current or selected cover photo">
+            <div class="cover-frame-heading"><div><strong>Choose your strongest frame</strong><span>Eyes to lens · relaxed mouth or slight smile · sharp face · upright posture</span></div><button type="button" id="usePausedCoverFrame">Use paused frame</button></div>
+            <div class="cover-candidates-state" id="coverCandidatesState">Finding clean, caption-free frames…</div>
+            <div class="cover-candidate-grid" id="coverCandidateGrid" aria-label="Cover frame choices"></div>
+            <div class="cover-quality-note"><strong>Hormozi-style check</strong><span>Pick calm confidence over a mid-word expression. Avoid closed eyes, motion blur, or a wide-open mouth.</span></div>
+            <div class="cover-copy-fields"><label>Kicker<input id="coverKicker" maxlength="48" placeholder="APPOINTMENT AUDIT"></label><label>Blue accent<input id="coverAccent" maxlength="48" placeholder="PAYING"></label><label>White headline<input id="coverHeadline" maxlength="80" placeholder="FOR SILENCE"></label></div>
+            <p class="local-cover-note">Apply cover changes directly here. No Codex prompt is needed.</p>
+            <label for="coverFeedback">Optional note saved with this cover</label><textarea id="coverFeedback" rows="2" placeholder="Example: slight smile, eyes on lens."></textarea>
+            <button class="primary-review-action" id="regenerateCover">Apply this cover now</button>
+          </section>
+          <section class="feedback-card seo-feedback-card">
+            <div class="feedback-heading"><div><span>Video SEO package</span><strong>Keywords attached to this reel</strong></div><span id="seoFeedbackState">File + Postiz</span></div>
+            <label for="seoPrimary">Primary search phrase</label><input id="seoPrimary" maxlength="120" placeholder="how to improve sales call show rate">
+            <label for="seoRelated">Related keywords</label><textarea id="seoRelated" rows="3" placeholder="booked sales calls, sales call no-shows, appointment conversion"></textarea>
+            <label for="seoHashtags">Relevant hashtags</label><input id="seoHashtags" maxlength="240" placeholder="#AppointmentSetting #ShowRate #SalesOperations">
+            <div class="seo-keyword-preview" id="seoKeywordPreview"></div>
+            <p class="seo-disclosure">Saved as MP4 metadata and in the Postiz-ready package. Nothing is hidden outside the visible video frame.</p>
+            <button class="primary-review-action" id="saveSeoPackage">Save keywords and attach to video</button>
+          </section>
+          <section class="feedback-card caption-feedback-card"><div class="feedback-heading"><div><span>Burned captions</span><strong>Readable and clear of the face</strong></div><span id="captionFeedbackState">Face-safe lower third</span></div><button type="button" class="caption-guide-toggle" id="toggleCaptionGuide">Preview caption placement</button><div class="caption-position-presets"><button data-caption-y="1450">Low</button><button data-caption-y="1270" class="active">Face-safe 1270</button><button data-caption-y="460">Upper third</button></div><label for="captionPosition">Caption vertical position</label><input id="captionPosition" type="range" min="360" max="1500" step="10" value="1270"><div class="position-scale"><span>Top</span><output id="captionPositionValue">1270px</output><span>Bottom</span></div><label for="captionFeedback">Caption feedback</label><textarea id="captionFeedback" rows="2" placeholder="Example: keep these at 1270px with the larger high-contrast style."></textarea><button class="primary-review-action" id="redoCaptions">Redo captions and final video</button></section>
+          <section class="feedback-card framing-feedback-card"><div class="feedback-heading"><div><span>Framing</span><strong>Face size and headroom</strong></div><span id="framingState">Full frame</span></div><div class="caption-position-presets"><button data-frame-zoom="1">Full</button><button data-frame-zoom="1.1">1.10x</button><button data-frame-zoom="1.15">1.15x</button><button data-frame-zoom="1.2">1.20x</button><button data-frame-zoom="1.3">1.30x</button></div><label for="framingZoom">Zoom, cropped from the top of the frame</label><input id="framingZoom" type="range" min="1" max="1.6" step="0.05" value="1"><div class="position-scale"><span>Full</span><output id="framingZoomValue">1.00x</output><span>Tight</span></div><label for="framingFeedback">Framing feedback</label><textarea id="framingFeedback" rows="2" placeholder="Example: keep my eyes in the top third, no sky above my head."></textarea><button class="primary-review-action" id="applyFraming">Apply framing and rebuild reel</button></section>
+        </aside>
+      </div>
+    </section>
+    <div class="automation-footer"><span id="mcpState">MCP bridge ready</span><span>Everything stays local until you choose to publish.</span><button id="copyMcpButton">Copy MCP config</button></div>
+  </aside>
+
+  <div class="schedule-confirm-backdrop" id="scheduleConfirmModal" hidden role="dialog" aria-modal="true" aria-labelledby="scheduleConfirmTitle">
+    <section class="schedule-confirm-card">
+      <header>
+        <div><span class="eyebrow">FINAL POSTIZ CHECK</span><h2 id="scheduleConfirmTitle">Upload and schedule this exact plan?</h2></div>
+        <button type="button" id="closeScheduleConfirmation" aria-label="Close confirmation">&times;</button>
+      </header>
+      <div class="schedule-confirm-body">
+        <p class="schedule-confirm-intro">Nothing has been sent yet. This next action uploads the selected media, creates the scheduled posts, and verifies them against the live Postiz calendar.</p>
+        <div class="schedule-confirm-summary" id="scheduleConfirmSummary"></div>
+        <div class="schedule-confirm-window" id="scheduleConfirmWindow"></div>
+        <div class="schedule-confirm-warning" id="scheduleConfirmWarning"></div>
+        <div class="schedule-confirm-rules">
+          <strong>Safety checks stay on</strong>
+          <span>Every reel must still be approved. Connected channels, duplicate posts, saved Postiz IDs, and the final live calendar are checked automatically.</span>
+        </div>
+        <label class="schedule-confirm-field" for="scheduleConfirmText"><span>Type <b>SCHEDULE</b> to unlock the live action</span><input id="scheduleConfirmText" autocomplete="off" spellcheck="false" placeholder="SCHEDULE"></label>
+      </div>
+      <footer><button type="button" id="cancelScheduleConfirmation">Cancel</button><button type="button" class="schedule-confirm-start" id="startPostizSchedule" disabled>Start upload + scheduling</button></footer>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="web-adapter.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

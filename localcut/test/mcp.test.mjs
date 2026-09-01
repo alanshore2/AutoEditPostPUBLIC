@@ -1,0 +1,31 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { createInterface } from "node:readline";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+test("MCP initializes and advertises talking-head graph tools", async () => {
+  const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+  const child = spawn(process.execPath, [join(root, "src", "server.mjs")], { cwd: root, stdio: ["pipe", "pipe", "pipe"] });
+  const output = createInterface({ input: child.stdout, crlfDelay: Infinity });
+  child.stdin.write(JSON.stringify({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "test", version: "1" } } }) + "\n");
+  child.stdin.write(JSON.stringify({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} }) + "\n");
+  child.stdin.end();
+  const responses = [];
+  for await (const line of output) responses.push(JSON.parse(line));
+  assert.equal(responses[0].result.serverInfo.name, "localcut");
+  const names = responses[1].result.tools.map((tool) => tool.name);
+  assert.ok(names.includes("create_talking_head_pipeline"));
+  assert.ok(names.includes("run_talking_head_pipeline"));
+  assert.ok(names.includes("read_talking_head_pipeline"));
+  assert.ok(names.includes("update_project"));
+  assert.ok(names.includes("undo_project"));
+  assert.ok(names.includes("save_project_version"));
+  assert.ok(names.includes("read_transcript"));
+  assert.ok(names.includes("local_export"));
+  assert.ok(names.includes("upload_media_to_server"));
+  assert.ok(names.includes("inspect_postiz_publishing"));
+  assert.ok(names.includes("build_postiz_plan"));
+  assert.ok(names.includes("schedule_postiz_plan"));
+});

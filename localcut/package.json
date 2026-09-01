@@ -1,0 +1,64 @@
+{
+  "name": "localcut-desktop",
+  "productName": "LocalCut",
+  "private": true,
+  "type": "module",
+  "version": "0.9.1",
+  "author": "XZero",
+  "description": "Local-first talking-head video editor and MCP server",
+  "main": "desktop/main.mjs",
+  "scripts": {
+    "check": "node --check src/server.mjs && node --check src/editor-engine.mjs && node --check src/pipeline.mjs && node --check src/publish-master.mjs && node --check src/publishing.mjs && node --check src/podcast.mjs && node --check src/web-host.mjs && node --check desktop/main.mjs && node --check desktop/preload.cjs && node --check desktop/renderer/web-adapter.js && node --check desktop/renderer/app.js",
+    "test": "node --test",
+    "pipeline": "node src/pipeline-cli.mjs",
+    "mcp": "node src/server.mjs",
+    "start": "electron .",
+    "desktop": "electron . --desktop",
+    "web": "electron . --web",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0"
+  },
+  "devDependencies": {
+    "electron": "43.2.0",
+    "electron-builder": "26.15.7"
+  },
+  "build": {
+    "appId": "com.xzero.localcut",
+    "productName": "LocalCut",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**",
+      "node_modules/ffprobe-static/**"
+    ],
+    "files": [
+      "desktop/**/*",
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "LocalCut-Setup-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LocalCut"
+    }
+  }
+}
