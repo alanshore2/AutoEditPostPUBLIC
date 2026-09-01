@@ -124,9 +124,11 @@ if (!PRIMARY_INSTANCE) {
 
   const defaults = {
     autoEditRoot: DEFAULT_AEP,
-    inputPath: join(DEFAULT_AEP, "Raw", "726_53192.MP4"),
-    manifestPath: join(DEFAULT_AEP, "out", "yaps", "yap_cutlists.json"),
-    outputDir: join(DEFAULT_AEP, "out", "yaps"),
+    // No default source video: the studio opens empty and the first video in
+    // <root>/Raw (or an imported asset) becomes the project source.
+    inputPath: "",
+    manifestPath: join(DEFAULT_AEP, "out", "reels", "cutlists.json"),
+    outputDir: join(DEFAULT_AEP, "out", "reels"),
   };
 
   const loadPostizCredential = loadStoredPostizCredential;

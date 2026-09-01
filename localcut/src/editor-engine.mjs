@@ -235,8 +235,7 @@ export function createEditorEngine({ dataDir, ffmpegPath, ffprobePath } = {}) {
         settings: { aspectRatio: "9:16", captions: true, snapping: true, workspace: "default", designStyle: "Modern Editorial" },
       });
       const autoEditRoot = resolve(args.autoEditRoot);
-      const legacySource = join(autoEditRoot, "Raw", "726_53192.MP4");
-      let sourcePath = args.sourceVideo ? resolve(args.sourceVideo) : (existsSync(legacySource) ? legacySource : null);
+      let sourcePath = args.sourceVideo ? resolve(args.sourceVideo) : null;
       if (!sourcePath) {
         const rawDir = join(autoEditRoot, "Raw");
         try {

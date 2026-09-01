@@ -158,6 +158,10 @@ Windows Electron UI, a stdio MCP server (so an AI client can drive the
 editor), an authenticated upload server, a browser gateway, and Postiz
 scheduling/repair tooling.
 
+![LocalCut studio — AI workflow panel, asset bins, 9:16 viewer, and timeline](docs/screenshots/localcut-studio.png)
+
+![LocalCut web gateway sign-in](docs/screenshots/localcut-web-signin.png)
+
 ```bash
 cd localcut
 npm install
